@@ -11,6 +11,7 @@ import android.support.annotation.AnimatorRes;
 import android.support.annotation.DrawableRes;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -104,9 +105,9 @@ public class CircleIndicator extends LinearLayout {
     }
 
     public void configureIndicator(int indicatorWidth, int indicatorHeight, int indicatorMargin,
-            @AnimatorRes int animatorId, @AnimatorRes int animatorReverseId,
-            @DrawableRes int indicatorBackgroundId,
-            @DrawableRes int indicatorUnselectedBackgroundId) {
+                                   @AnimatorRes int animatorId, @AnimatorRes int animatorReverseId,
+                                   @DrawableRes int indicatorBackgroundId,
+                                   @DrawableRes int indicatorUnselectedBackgroundId) {
 
         mIndicatorWidth = indicatorWidth;
         mIndicatorHeight = indicatorHeight;
@@ -174,10 +175,12 @@ public class CircleIndicator extends LinearLayout {
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            Log.e("TAG", "position " + position + "  positionOffset  " + positionOffset);
         }
 
-        @Override public void onPageSelected(int position) {
-
+        @Override
+        public void onPageSelected(int position) {
+            Log.e("TAG", "position " + position);
             if (mViewpager.getAdapter() == null || mViewpager.getAdapter().getCount() <= 0) {
                 return;
             }
@@ -208,7 +211,9 @@ public class CircleIndicator extends LinearLayout {
             mLastPosition = position;
         }
 
-        @Override public void onPageScrollStateChanged(int state) {
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            Log.e("TAG", "state " + state);
         }
     };
 
@@ -217,7 +222,8 @@ public class CircleIndicator extends LinearLayout {
     }
 
     private DataSetObserver mInternalDataSetObserver = new DataSetObserver() {
-        @Override public void onChanged() {
+        @Override
+        public void onChanged() {
             super.onChanged();
             if (mViewpager == null) {
                 return;
@@ -241,7 +247,8 @@ public class CircleIndicator extends LinearLayout {
     /**
      * @deprecated User ViewPager addOnPageChangeListener
      */
-    @Deprecated public void setOnPageChangeListener(OnPageChangeListener onPageChangeListener) {
+    @Deprecated
+    public void setOnPageChangeListener(OnPageChangeListener onPageChangeListener) {
         if (mViewpager == null) {
             throw new NullPointerException("can not find Viewpager , setViewPager first");
         }
@@ -269,7 +276,7 @@ public class CircleIndicator extends LinearLayout {
     }
 
     private void addIndicator(int orientation, @DrawableRes int backgroundDrawableId,
-            Animator animator) {
+                              Animator animator) {
         if (animator.isRunning()) {
             animator.end();
             animator.cancel();
@@ -295,7 +302,8 @@ public class CircleIndicator extends LinearLayout {
     }
 
     private class ReverseInterpolator implements Interpolator {
-        @Override public float getInterpolation(float value) {
+        @Override
+        public float getInterpolation(float value) {
             return Math.abs(1.0f - value);
         }
     }
